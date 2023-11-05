@@ -1,0 +1,21 @@
+esieabot manager version 0.1.18
+Preparing the launch of startup scripts
+Every startup scripts has been launched
+Preparing the launch of once scripts
+Running /boot/esieabot/once/rename-host.sh
+Script /boot/esieabot/once/rename-host.sh has been deleted
+Running /boot/esieabot/once/reset-pi-passwd.sh
+Script /boot/esieabot/once/reset-pi-passwd.sh has been deleted
+Running /boot/esieabot/once/reset-samba-passwd.sh
+Script /boot/esieabot/once/reset-samba-passwd.sh has been deleted
+Running /boot/esieabot/once/reset-ssh-host-key.sh
+Script /boot/esieabot/once/reset-ssh-host-key.sh has been deleted
+Running /boot/esieabot/once/resize.sh
+Script /boot/esieabot/once/resize.sh has been deleted
+Running /boot/esieabot/once/zzz-shutdown.sh
+Traceback (most recent call last):
+  File "/usr/bin/esieabot-manager.py", line 137, in <module>
+    find_and_run("once", sync=True, delete_after_run=True)
+  File "/usr/bin/esieabot-manager.py", line 125, in find_and_run
+    os.remove(script)
+FileNotFoundError: [Errno 2] No such file or directory: '/boot/esieabot/once/zzz-shutdown.sh'

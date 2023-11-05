@@ -1,0 +1,402 @@
+
+
+1- on discord:
+
+	- creating account
+	- creating server
+	- creating applicaiton
+	- creating bot
+	- configure the application
+	- get the URL of the bot and link it to the serever.
+
+
+2- packages installation:
+
+	$ sudo apt update
+	$ sudo apt upgrade
+	$ sudo apt install -y python3-picamera2 --no-install-recommends
+	
+	- PIP3:
+		pi@esieabot-8f339e:/esieabot/service $ sudo apt install python3-pip
+		pi@esieabot-8f339e:/esieabot/service $ pip3 -V
+		pip 20.3.4 from /usr/lib/python3/dist-packages/pip (python 3.9)
+		pi@esieabot-8f339e:/esieabot/service $
+		
+		
+	- install discord:
+	pi@esieabot-8f339e:/esieabot/service $ pip3 install discord.py
+	 sudo pip install discord.py
+
+	
+	
+	- install PIGPIO
+		$ sudo apt install python-RPi.GPIO
+		$sudo apt-get install pigpio python-pigpio python3-pigpio
+			## make sure that pigpio server is running:
+			pi@esieabot-8f339e:~ $ ps -aux | grep "pigpio"
+			root       235 10.3  0.4  11560  1788 ?        SLsl 15:00  17:10 /usr/bin/pigpiod -l -n 127.0.0.1
+			pi@esieabot-8f339e:~ $
+			
+			
+			## if not, launch it:
+			$sudo pigpiod &
+		
+		
+	- install vim
+	
+		$sudo apt install vim
+
+
+
+3- controlling the motors:
+
+	- https://ericgoebelbecker.com/post/raspberry-pi-driving-motors-pwm/
+	
+
+
+
+
+4- GPIO librairies:
+
+	- Pigpio: http://abyz.me.uk/rpi/pigpio/python.html
+	- RPi.GPIO: 
+	- wiringPi: http://wiringpi.com/wiringpi-deprecated/
+	
+	
+	
+5- activate Privileged Intents:
+
+	- https://discordpy.readthedocs.io/en/stable/intents.html
+	
+	
+	
+6- camera: official doc: https://picamera.readthedocs.io/en/release-1.13/
+
+	- activate the camera:
+		$ sudo raspi-config
+		then :
+			- interface option --> camera --> would you like to enable the camera and click yes.
+			- the rasberypi will reboot.
+		
+		- to detect the presence of a comera:
+			pi@esieabot-8f339e:~ $ vcgencmd get_camera
+			supported=1 detected=0, libcamera interfaces=0
+			pi@esieabot-8f339e:~ $
+ 			
+			==> From the output, the camera is not detected.
+			
+		- reboot the rasbery pi and launch the command again:
+			pi@esieabot-8f339e:~ $ vcgencmd get_camera
+			supported=1 detected=1, libcamera interfaces=0
+
+			==> From the output, the camera is  detected.
+			
+			
+	- command to capture an image:
+	
+		$ raspistill -o cam.jpg		
+		pi@esieabot-8f339e:~ $ raspistill -o cam.jpg
+		mmal: Cannot read camera info, keeping the defaults for OV5647
+		mmal: mmal_vc_component_create: failed to create component 'vc.ril.camera' (1:ENOMEM)
+		mmal: mmal_component_create_core: could not create component 'vc.ril.camera' (1)
+		mmal: Failed to create camera component
+		mmal: main: Failed to create camera component
+		mmal: Camera is not detected. Please check carefully the camera module is installed correctly
+
+		==> activate the camera. See the previous step.		
+		
+7- install VNC viewer: it give a virtul Desktop view.
+
+######################################################### Action points
+
+
+- look for an implementation of a camera with reasbery Pi using Picamera2 lib.
+	- examples: 
+		- https://www.tomshardware.com/how-to/use-picamera2-take-photos-with-raspberry-pi
+		- https://www.youtube.com/watch?v=RPZZZ6FSZuk&ab_channel=GaryExplains
+		- https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+
+
+	- functions:
+		- start
+		- stop.
+
+
+- look how to log all action for the programm using logging lib.
+
+
+- look for exemples of implemntation of DiscordBot qith python.
+	example: how ocntol my resbery Pi from discord ?
+
+	https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html?highlight=add_command
+	
+
+- for discordbot, the robot has to connect to dicord using user_id and token.
+	
+
+- motor managmeent: https://www.zerynth.com/blog/using-python-to-control-servo-motors-for-internet-of-things-projects/
+
+
+
+- servo motor: https://www.teachmemicro.com/raspberry-pi-pwm-servo-tutorial/
+
+
+
+
+
+
+
+
+
+######################################################### audit:
+
+
+
+# In this folder where we will put all our scripts:/esieabot/services
+
+pi@esieabot-8f339e:/esieabot/service $ ll
+total 20
+-rwxr-xr-x 1 root root 8684 Oct 13 15:55 esieabot-demo-v3
+-rwxr-xr-x 1 root root   52 Oct 13 15:55 run-esieabot-api.sh
+drwxr-xr-x 2 root root 2048 Oct 13 15:55 data
+-rwxr-xr-x 1 root root 5253 Oct 13 15:56 esieabot-webcamera.py
+pi@esieabot-8f339e:/esieabot/service $
+
+
+
+
+## the scripts running on the backgroud:
+
+
+pi@esieabot-8f339e:~ $ ps -aux | grep "esieabot*"
+avahi      207  0.0  0.8   6896  3056 ?        Ss   23:45   0:00 avahi-daemon: running [esieabot-8f339e.local]
+root       339  0.3  3.1  20396 11868 ?        Ss   23:46   0:02 /usr/bin/python3 /usr/bin/esieabot-manager.py
+root       417  0.1  0.4   3604  1516 ?        Sl   23:46   0:01 /tmp/esieabot/esieabot-demo-v3
+root       419  0.4  0.0      0     0 ?        Z    23:46   0:02 [esieabot-webcam] <defunct>
+root       420  0.0  0.7   7884  2916 ?        S    23:46   0:00 /bin/bash /tmp/esieabot/run-esieabot-api.sh
+pi         628  0.0  0.5   7568  2092 pts/0    S+   23:55   0:00 grep --color=auto esieabot*
+pi@esieabot-8f339e:~ $
+
+
+- Script to be checked:
+
+	- /usr/bin/esieabot-manager.py
+	
+	- /tmp/esieabot/esieabot-demo-v3
+	
+	- /tmp/esieabot/run-esieabot-api.sh : 
+	pi@esieabot-8f339e:~ $ cat /tmp/esieabot/run-esieabot-api.sh
+	#!/bin/bash
+	export FLASK_APP=esieabot-api
+	flask run
+	pi@esieabot-8f339e:~ $
+
+
+####################################################################################### Project content:
+
+
+# Gitlab link to gitlab:https://gitlab.esiea.fr/esieabot
+
+The gitlab has:
+
+		- esieabot-docs
+		- esieabot-hw
+		- esieabot-os
+			- build-esieabot-os ==> tools to build the esieabot OS.
+			
+***			- esieabot-api : https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-api
+				
+				esieabot-api is the web service made to control the esieabot using pigpiod API as backend. 
+				It allows to control its motors in PWM mode and its servos through web commands. 
+				It opens a web socket on port 8000 and waits for commands on adresses /command for the motors and /camera for servos. 
+				The wiring should be the same as the official intructions.
+				
+				==> Check the usage in the README file.
+
+
+**			- esieabot-manager: https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-manager
+				
+				esieabot-manager is the main service of esieabot-os. 
+				It manages every other sub-services. 
+				It's based on a particular file tree on the boot partition of the SD card.
+				
+			
+			
+*			- esieabot-repository: https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-repository#esieabot-repository
+	
+				This repository contains the managing scripts of esieabot's apt repository. 
+				It's hosted at ESIEA Laval on Vivaldi server. The script update.sh generate every updates and packages' signatures. 
+				It's launched as cron every 15 minutes.
+				The add the repository to your esieabot, add this line in /etc/apt/sources.list
+				
+				
+**			- esieabot-scripts: https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-scripts
+			
+				This repositry contains scripts and tools useful for esieabot-os. They are not necessarily related to each others.
+				
+				the full list of scripts are mentioned in the README file. The most important ones are:
+					
+					- esieabot-demo is a compiled C program to test the joystick and motors (deprecated, because still based on WiringPi)
+					- esieabot-demo-v3 is a compiled C program to test the joystick and motors through pigpiod API
+					
+				
+				
+***			- esieabot-web-controller: https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-web-controller
+				
+				This web app can control your esieabot wirelessly.
+				
+				Needs webcamera and esieabot-api
+				
+				Copy every files in /esieabot/web folder and restart esieabot-manager
+				
+				
+***			- esieabot-webcamera: https://gitlab.esiea.fr/esieabot/esieabot-os/esieabot-webcamera
+			
+				esieabot-webcamera is the video streaming service of the pi camera for the esieabot. 
+				It opens a web socket on the port 5000 with a MJPEG stream on the address /stream. 
+				It only starts recording when there is at least one client and stop recording if there aren't any. 
+				It makes use of picamera library, see LICENCE for more details.
+				
+				Copy esieabot-webcamera.py to /esieabot/service and reload esieabot-manager.
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+	
+
+# Esieabot repository: https://esieabot.esiea.fr/apt-repo/
+	
+	- Dists
+		- in : https://esieabot.esiea.fr/apt-repo/dists/stable/main/binary-all/Packages
+					Package: esieabot-api
+					Version: 0.1.8
+					Architecture: all
+					Maintainer: Gauthier HEISS <gauthier.heiss@esiea.fr>
+					Depends: esieabot-manager,python3-flask
+					Filename: pool/main/esieabot-api.deb
+					Size: 2284
+					MD5sum: 976ec2bddd29514127a7f4c3f0f94978
+					SHA1: e4ce20570481039cb64af3e399d0076b24481cd8
+					SHA256: aad000e6809656db8df01f5b7d28f4e55242fff29e6cb67129a1674db256a7cd
+					Description: esieabot-api service to control esieabot remotely with ease
+					
+					Package: esieabot-manager
+					Version: 0.1.19
+					Architecture: all
+					Maintainer: Gauthier HEISS <gauthier.heiss@esiea.fr>
+					Depends: python3,nginx
+					Filename: pool/main/esieabot-manager.deb
+					Size: 4496
+					MD5sum: c0d63025aebb63a603dd1c5388d2c75d
+					SHA1: e32ea29ec38d90e60506b7170cbb53057a72daf1
+					SHA256: 1b16b62435e38451f45b47c2e291bc61e387d4daa7c136f7dc67801e39c197e3
+					Description: esieabot-manager service to run esieabot core funtions
+					
+					Package: esieabot-web-controller
+					Version: 0.1.5
+					Architecture: all
+					Maintainer: Gauthier HEISS <gauthier.heiss@esiea.fr>
+					Depends: esieabot-manager,esieabot-api
+					Recommends: esieabot-webcamera
+					Filename: pool/main/esieabot-web-controller.deb
+					Size: 68692
+					MD5sum: 74753e5d11b734de92ff557d18c33c9b
+					SHA1: ab32d1e8348e060f08fbc1591bfbc808aca1de81
+					SHA256: d9a9c9ae2437abfa259a97d1423535d8ec758bde3be74cff91f1774eb28638ec
+					Description: esieabot-web-controller is a web page with virtual joysticks to control esieabot
+					
+					Package: esieabot-webcamera
+					Version: 0.1.2
+					Architecture: all
+					Maintainer: Gauthier HEISS <gauthier.heiss@esiea.fr>
+					Depends: esieabot-manager,python3-picamera
+					Filename: pool/main/esieabot-webcamera.deb
+					Size: 3060
+					MD5sum: 6863e0342a4a67ba151c1f93a1979ecd
+					SHA1: 0da6451c150e8000aada34e56fccff597c05b388
+					SHA256: 57409853664b5dbaf21c361a289256c066f6cacf3e52a3bdec4ea32e83edafc1
+					Description: esieabot-webcamera creates a webcamera stream for remote control
+
+
+    - esieabot-repo.key		
+    - pool
+		- In https://esieabot.esiea.fr/apt-repo/pool/main/ 
+		
+			- esieabot-api.deb
+			- esieabot-manager.deb
+			- esieabot-web-controller.deb
+			- esieabot-webcamera.deb
+		
+		
+		
+		
+		
+		
+################################################## Links
+
+
+- Discord:
+
+	- https://discordpy.readthedocs.io/en/latest/api.html?highlight=client#discord.Intents
+	- https://discordpy.readthedocs.io/en/stable/intents.html
+	- https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html
+	- https://www.writebots.com/discord-bot-token/
+	- 
+	
+	
+	
+- GPIO:
+	- http://abyz.me.uk/rpi/pigpio/ex_motor_shield.html
+	- http://abyz.me.uk/rpi/pigpio/python.html#write
+	- https://elinux.org/RPi_GPIO_Code_Samples
+	- https://abyz.me.uk/rpi/pigpio/python.html#callback
+	
+	- GPIO Zero:
+		- https://gpiozero.readthedocs.io/en/stable/api_output.html#gpiozero.Motor.stop
+		- https://gpiozero.readthedocs.io/en/stable/index.html
+
+
+- Project examplesples:
+	
+	- https://ericgoebelbecker.com/post/raspberry-pi-driving-motors-pwm/
+	- https://www.hackster.io/MohammadReza_Sharifi/lighting-control-using-discord-bot-and-raspberry-pi-51aaa9
+	- https://www.youtube.com/watch?v=Mzz_58aVhVU&ab_channel=MohammadRezaSharifi
+	- https://projects.raspberrypi.org/en/projects/physical-computing/14
+	- 
+		
+		
+		
+		
+- process management:
+	- https://python-forum.io/thread-27644.html
+	- https://pymotw.com/3/concurrent.futures/
+	- https://stackoverflow.com/questions/7207309/how-to-run-functions-in-parallel/60832288#60832288
+		
+
+- logging:
+    - https://www.machinelearningplus.com/python/python-logging-guide/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
